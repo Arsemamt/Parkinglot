@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <title>Parking Lot Reservation</title>
+
+    <style>
+        .img {
+            text-align: center;
+            background-image: url("img/parkingimg.jpg");
+            background-size: cover;
+            background-position: center;
+            color: #ffffff;
+            padding: 100px 0;
+            height: 100vh;
+            text-align: center;
+        }
+
+
+        .form-container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="img"><br><br><br><br><br><br><br><br><br>
+            <h1 class="display-3 fw-bold">Welcome to Our Parking Lot</h1>
+            <br><br>
+            <a class="btn btn-primary btn-lg" href="#form" role="button">Park Now!</a>
+        </div>
+    </header>
+    <br>
+    <br>
+    <main>
+        <div class="container">
+            <div class="row text-secondary">
+                <div id="form" class="col-lg-5 fw-bold fs-5">
+                    <h2 class="fw-bold fs-1 text-center text-dark">Reservation Form</h2>
+                    <br>
+                    <form id="reservation-form">
+                        <div class="form-group form-group-md ">
+                            <label for="fullName">Full Name</label><br>
+                            <input type="text" class="form-control-lg" id="fullName" required>
+                        </div>
+
+                        <div class="form-group form-group-md">
+                            <label for="licensePlate">License Plate</label><br>
+                            <input type="text" class="form-control-lg" id="licensePlate" required>
+                        </div>
+
+                        <div class="form-group form-group-md">
+                            <label for="phoneNumber">Phone Number</label><br>
+                            <input type="text" class="form-control-lg" id="phoneNumber" required>
+                        </div>
+
+                        <div class="form-group form-group-md">
+                            <label for="entryTime">Entry Time</label><br>
+                            <input type="time" class="form-control-lg" id="entryTime" required>
+                        </div>
+
+                        <div class="form-group form-group-md">
+                            <label for="exitTime">Exit Time</label><br>
+                            <input type="time" class="form-control-lg" id="exitTime" required>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-dark">Submit</button>
+                    </form>
+                    <br><br><br>
+
+                </div>
+                <div class="col-7 float-lg-right text-center">
+                    <h2 class="fw-bold fs-1 text-dark">System Log</h2>
+                    <br>
+
+                    <table id="system-log" class="table fs-5 text-secondary">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>License Plate</th>
+                                <th>Phone Number</th>
+                                <th>Entry Time</th>
+                                <th>Exit Time</th>
+                                <th>Total Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.getElementById("reservation-form");
+                const systemLog = document.getElementById("system-log");
+
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault();
+
+                    const fullName = document.getElementById("fullName").value;
+                    const licensePlate = document.getElementById("licensePlate").value;
+                    const phoneNumber = document.getElementById("phoneNumber").value;
+                    const entryTime = document.getElementById("entryTime").value;
+                    const exitTime = document.getElementById("exitTime").value;
+
+                    const entryDate = new Date();
+                    const exitDate = new Date();
+                    const entryParts = entryTime.split(":");
+                    const exitParts = exitTime.split(":");
+                    entryDate.setHours(entryParts[0], entryParts[1]);
+                    exitDate.setHours(exitParts[0], exitParts[1]);
+
+                    const totalTime = Math.abs(exitDate - entryDate) / 3600000;
+
+                    const newRow = systemLog.insertRow();
+                    const fullNameCell = newRow.insertCell();
+                    const licensePlateCell = newRow.insertCell();
+                    const phoneNumberCell = newRow.insertCell();
+                    const entryTimeCell = newRow.insertCell();
+                    const exitTimeCell = newRow.insertCell();
+                    const totalTimeCell = newRow.insertCell();
+                    const deleteCell = newRow.insertCell();
+
+                    fullNameCell.textContent = fullName;
+                    licensePlateCell.textContent = licensePlate;
+                    phoneNumberCell.textContent = phoneNumber;
+                    entryTimeCell.textContent = entryTime;
+                    exitTimeCell.textContent = exitTime;
+                    totalTimeCell.textContent = totalTime.toFixed(2) + " hours";
+
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Delete";
+                    deleteButton.classList.add("btn", "btn-danger", "btn-sm");
+                    deleteButton.addEventListener("click", function () {
+                        systemLog.deleteRow(newRow.rowIndex);
+                    });
+
+                    deleteCell.appendChild(deleteButton);
+
+                    form.reset();
+                });
+            });
+        </script>
+    </main>
+</body>
+
+</html>
